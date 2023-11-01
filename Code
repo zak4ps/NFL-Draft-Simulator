@@ -1,0 +1,418 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+void chooseNames(string& f, string& l, int pos) {
+	string qbf[10] = { "Matt", "Kyle", "Jake", "Aaron", "Zack", "Tom", "Sam", "Josh", "Pat", "Ryan" };
+	string qbl[10] = { "Wilson", "White", "Brown", "Johnson", "Smith", "Jones", "Davis", "Harris", "Taylor", "Moore" };
+	string of[10] = { "Calvin", "Aaron", "Justin", "Mike", "Nick", "Cooper", "Tyler", "Chris", "Adam", "Mark" };
+	string ol[10] = { "Johnson", "Jones", "Brown", "Allen", "Evans", "Taylor", "Nash", "Moore", "Chase", "Rush" };
+	int r_f = rand() % 10;
+	int r_l = rand() % 10;
+	if (pos == 1) {
+		f = qbf[r_f];
+		l = qbl[r_l];
+	}
+	else {
+		f = of[r_f];
+		l = ol[r_l];
+	}
+}
+
+void chooseRatings(int& curr, int& pot, int& ovr, int pos) {
+	int range = 5;
+	int r_curr;
+	int r_pot;
+	if (pos == 1) {
+		r_curr = 69;
+		r_pot = 15;
+	}
+	else if (pos == 2) {
+		r_curr = 75;
+		r_pot = 5;
+	}
+	else {
+		r_curr = 72;
+		r_pot = 10;
+	}
+	curr = rand() % range + r_curr;
+	pot = rand() % r_pot + 1;
+	ovr = curr + (rand() % pot);
+}
+
+int main() {
+	cout << "Welcome to NFL Draft Simulator! Would you like a tutorial?\n";
+	char tut;
+	cin >> tut;
+	if (tut == 'y' || tut == 'Y') {
+		cout << "NFL Draft Simulator lets you run a mock NFL Draft, which consists of a round for Quarterbacks, " <<
+			"Runningbacks and Receivers.  Each round you will be shown two players, along with each player's current " <<
+			"and potential ratings.  The player's overall rating will fall somewhere in between current and potential.  " <<
+			"Once you have drafted all your players, you will be shown a team summary, which contains your teams' potential," <<
+			" average overall, and best player.  You will also be shown a draft summary consisting of average overall " <<
+			"and the best player in the draft.  Once every draft, you will be allowed to request a trade by pressing '3'" <<
+			" instead of making your pick, and you will be shown two new players.  If you try and trade after you have already" <<
+			" used your trade, a random player from that round will be selected for you.  Good luck!\n";
+	}
+	cout << "You are now on the clock. \n";
+	srand(time(nullptr));
+	bool trade = true;
+	cout << "Round 1: Quarterbacks\n";
+	string team_qbf;
+	string team_qbl;
+	int team_qbo;
+	string best_qbf;
+	string best_qbl;
+	int best_qbo;
+	string fqb1;
+	string lqb1;
+	chooseNames(fqb1, lqb1, 1);
+	cout << "[1] " << fqb1 << " " << lqb1 << '\n';
+	cout << "R:  P:  \n";
+	int curr_qb1;
+	int pot_qb1;
+	int ovr_qb1;
+	chooseRatings(curr_qb1, pot_qb1, ovr_qb1, 1);
+	cout << curr_qb1 << "  " << curr_qb1 + pot_qb1 << '\n';
+	string fqb2;
+	string lqb2;
+	chooseNames(fqb2, lqb2, 1);
+	cout << "[2] " << fqb2 << " " << lqb2 << '\n';
+	cout << "R:  P:  \n";
+	int curr_qb2;
+	int pot_qb2;
+	int ovr_qb2;
+	chooseRatings(curr_qb2, pot_qb2, ovr_qb2, 1);
+	cout << curr_qb2 << "  " << curr_qb2 + pot_qb2 << '\n';
+	cout << "Make your selection: \n";
+	char pick;
+	cin >> pick;
+	if (pick == '1') {
+		team_qbf = fqb1;
+		team_qbl = lqb1;
+		team_qbo = ovr_qb1;
+	}
+	else if (pick == '2') {
+		team_qbf = fqb2;
+		team_qbl = lqb2;
+		team_qbo = ovr_qb2;
+	}
+	else {
+		trade = false;
+		cout << "We are getting word that there has been a trade.  Here are your new players: \n";
+		chooseNames(fqb1, lqb1, 1);
+		cout << "[1] " << fqb1 << " " << lqb1 << '\n';
+		cout << "R:  P:  \n";
+		chooseRatings(curr_qb1, pot_qb1, ovr_qb1, 1);
+		cout << curr_qb1 << "  " << curr_qb1 + pot_qb1 << '\n';
+		chooseNames(fqb2, lqb2, 1);
+		cout << "[2] " << fqb2 << " " << lqb2 << '\n';
+		cout << "R:  P:  \n";
+		chooseRatings(curr_qb2, pot_qb2, ovr_qb2, 1);
+		cout << curr_qb2 << "  " << curr_qb2 + pot_qb2 << '\n';
+		cout << "Make your selection: \n";
+		char pick;
+		cin >> pick;
+		if (pick == '1') {
+			team_qbf = fqb1;
+			team_qbl = lqb1;
+			team_qbo = ovr_qb1;
+		}
+		else if (pick == '2') {
+			team_qbf = fqb2;
+			team_qbl = lqb2;
+			team_qbo = ovr_qb2;
+		}
+		else {
+			cout << "You have already made your trade.  A random player will now be selected.\n";
+			int val = rand() % 2 + 1;
+			if (val == 1) {
+				team_qbf = fqb1;
+				team_qbl = lqb1;
+				team_qbo = ovr_qb1;
+			}
+			else {
+				team_qbf = fqb2;
+				team_qbl = lqb2;
+				team_qbo = ovr_qb2;
+			}
+		}
+	}
+	cout << "With the first overall pick in the draft, you have selected " << team_qbf << " " << team_qbl <<
+		" with an overall rating of " << team_qbo << '\n';
+	if (ovr_qb1 > ovr_qb2) {
+		best_qbf = fqb1;
+		best_qbl = lqb1;
+		best_qbo = ovr_qb1;
+	}
+	else {
+		best_qbf = fqb2;
+		best_qbl = lqb2;
+		best_qbo = ovr_qb2;
+	}
+	bool best_qb = false;
+	if (best_qbo == team_qbo) {
+		best_qb = true;
+	}
+
+	cout << "Round 2: Runningbacks\n";
+	string team_rbf;
+	string team_rbl;
+	int team_rbo;
+	string best_rbf;
+	string best_rbl;
+	int best_rbo;
+	string frb1;
+	string lrb1;
+	chooseNames(frb1, lrb1, 2);
+	cout << "[1] " << frb1 << " " << lrb1 << '\n';
+	cout << "R:  P:  \n";
+	int curr_rb1;
+	int pot_rb1;
+	int ovr_rb1;
+	chooseRatings(curr_rb1, pot_rb1, ovr_rb1, 2);
+	cout << curr_rb1 << "  " << curr_rb1 + pot_rb1 << '\n';
+	string frb2;
+	string lrb2;
+	chooseNames(frb2, lrb2, 2);
+	cout << "[2] " << frb2 << " " << lrb2 << '\n';
+	cout << "R:  P:  \n";
+	int curr_rb2;
+	int pot_rb2;
+	int ovr_rb2;
+	chooseRatings(curr_rb2, pot_rb2, ovr_rb2, 2);
+	cout << curr_rb2 << "  " << curr_rb2 + pot_rb2 << '\n';
+	cout << "Make your selection: \n";
+	char pick1;
+	cin >> pick1;
+	if (pick1 == '1') {
+		team_rbf = frb1;
+		team_rbl = lrb1;
+		team_rbo = ovr_rb1;
+	}
+	else if (pick1 == '2') {
+		team_rbf = frb2;
+		team_rbl = lrb2;
+		team_rbo = ovr_rb2;
+	}
+	else {
+		if (!trade) {
+			cout << "You have already made your trade.  A random player will now be selected.\n";
+			int val = rand() % 2 + 1;
+			if (val == 1) {
+				team_rbf = frb1;
+				team_rbl = lrb1;
+				team_rbo = ovr_rb1;
+			}
+			else {
+				team_rbf = frb2;
+				team_rbl = lrb2;
+				team_rbo = ovr_rb2;
+			}
+		}
+		else {
+			trade = false;
+			cout << "We are getting word that there has been a trade.  Here are your new players: \n";
+			chooseNames(frb1, lrb1, 2);
+			cout << "[1] " << frb1 << " " << lrb1 << '\n';
+			cout << "R:  P:  \n";
+			chooseRatings(curr_rb1, pot_rb1, ovr_rb1, 2);
+			cout << curr_rb1 << "  " << curr_rb1 + pot_rb1 << '\n';
+			chooseNames(frb2, lrb2, 2);
+			cout << "[2] " << frb2 << " " << lrb2 << '\n';
+			cout << "R:  P:  \n";
+			chooseRatings(curr_rb2, pot_rb2, ovr_rb2, 2);
+			cout << curr_rb2 << "  " << curr_rb2 + pot_rb2 << '\n';
+			cout << "Make your selection: \n";
+			char pick1;
+			cin >> pick1;
+			if (pick1 == '1') {
+				team_rbf = frb1;
+				team_rbl = lrb1;
+				team_rbo = ovr_rb1;
+			}
+			else if (pick1 == '2') {
+				team_rbf = frb2;
+				team_rbl = lrb2;
+				team_rbo = ovr_rb2;
+			}
+			else {
+				cout << "You have already made your trade.  A random player will now be selected.\n";
+				int val = rand() % 2 + 1;
+				if (val == 1) {
+					team_rbf = frb1;
+					team_rbl = lrb1;
+					team_rbo = ovr_rb1;
+				}
+				else {
+					team_rbf = frb2;
+					team_rbl = lrb2;
+					team_rbo = ovr_rb2;
+				}
+			}
+		}
+	}
+		cout << "With the second overall pick in the draft, you have selected " << team_rbf << " " << team_rbl <<
+			" with an overall rating of " << team_rbo << '\n';
+		if (ovr_rb1 > ovr_rb2) {
+			best_rbf = frb1;
+			best_rbl = lrb1;
+			best_rbo = ovr_rb1;
+		}
+		else {
+			best_rbf = frb2;
+			best_rbl = lrb2;
+			best_rbo = ovr_rb2;
+		}
+		bool best_rb = false;
+		if (best_rbo == team_rbo) {
+			best_rb = true;
+		}
+
+		cout << "Round 3: Recievers\n";
+		string team_wrf;
+		string team_wrl;
+		int team_wro;
+		string best_wrf;
+		string best_wrl;
+		int best_wro;
+		string fwr1;
+		string lwr1;
+		chooseNames(fwr1, lwr1, 3);
+		cout << "[1] " << fwr1 << " " << lwr1 << '\n';
+		cout << "R:  P:  \n";
+		int curr_wr1;
+		int pot_wr1;
+		int ovr_wr1;
+		chooseRatings(curr_wr1, pot_wr1, ovr_wr1, 3);
+		cout << curr_wr1 << "  " << curr_wr1 + pot_wr1 << '\n';
+		string fwr2;
+		string lwr2;
+		chooseNames(fwr2, lwr2, 3);
+		cout << "[2] " << fwr2 << " " << lwr2 << '\n';
+		cout << "R:  P:  \n";
+		int curr_wr2;
+		int pot_wr2;
+		int ovr_wr2;
+		chooseRatings(curr_wr2, pot_wr2, ovr_wr2, 3);
+		cout << curr_wr2 << "  " << curr_wr2 + pot_wr2 << '\n';
+		cout << "Make your selection: \n";
+		char pick2;
+		cin >> pick2;
+		if (pick2 == '1') {
+			team_wrf = fwr1;
+			team_wrl = lwr1;
+			team_wro = ovr_wr1;
+		}
+		else if (pick2 == '2') {
+			team_wrf = fwr2;
+			team_wrl = lwr2;
+			team_wro = ovr_wr2;
+		}
+		else {
+			if (!trade) {
+				cout << "You have already made your trade.  A random player will now be selected.\n";
+				int val = rand() % 2 + 1;
+				if (val == 1) {
+					team_wrf = fwr1;
+					team_wrl = lwr1;
+					team_wro = ovr_wr1;
+				}
+				else {
+					team_wrf = fwr2;
+					team_wrl = lwr2;
+					team_wro = ovr_wr2;
+				}
+			}
+			else {
+				trade = false;
+				cout << "We are getting word that there has been a trade.  Here are your new players: \n";
+				chooseNames(fwr1, lwr1, 3);
+				cout << "[1] " << fwr1 << " " << lwr1 << '\n';
+				cout << "R:  P:  \n";
+				chooseRatings(curr_wr1, pot_wr1, ovr_wr1, 3);
+				cout << curr_wr1 << "  " << curr_wr1 + pot_wr1 << '\n';
+				chooseNames(fwr2, lwr2, 3);
+				cout << "[2] " << fwr2 << " " << lwr2 << '\n';
+				cout << "R:  P:  \n";
+				chooseRatings(curr_wr2, pot_wr2, ovr_wr2, 3);
+				cout << curr_wr2 << "  " << curr_wr2 + pot_wr2 << '\n';
+				cout << "Make your selection: \n";
+				char pick1;
+				cin >> pick1;
+				if (pick1 == '1') {
+					team_wrf = fwr1;
+					team_wrl = lwr1;
+					team_wro = ovr_wr1;
+				}
+				else if (pick1 == '2') {
+					team_wrf = fwr2;
+					team_wrl = lwr2;
+					team_wro = ovr_wr2;
+				}
+				else {
+					cout << "You have already made your trade.  A random player will now be selected.\n";
+					int val = rand() % 2 + 1;
+					if (val == 1) {
+						team_wrf = fwr1;
+						team_wrl = lwr1;
+						team_wro = ovr_wr1;
+					}
+					else {
+						team_wrf = fwr2;
+						team_wrl = lwr2;
+						team_wro = ovr_wr2;
+					}
+				}
+			}
+		}
+		cout << "With the third overall pick in the draft, you have selected " << team_wrf << " " << team_wrl <<
+			" with an overall rating of " << team_wro << '\n';
+		if (ovr_wr1 > ovr_wr2) {
+			best_wrf = fwr1;
+			best_wrl = lwr1;
+			best_wro = ovr_wr1;
+		}
+		else {
+			best_wrf = fwr2;
+			best_wrl = lwr2;
+			best_wro = ovr_wr2;
+		}
+		bool best_wr = false;
+		if (best_wro == team_wro) {
+			best_wr = true;
+		}
+		cout << "Congratulations, the draft is finished.  You drafted " << team_qbf << " " << team_qbl << " [" <<
+			team_qbo << "] at Quarterback, " << team_rbf << " " << team_rbl << " [" << team_rbo <<
+			"] at Runningback, and " << team_wrf << " " << team_wrl << " [" << team_wro << "] at Receiver, " <<
+			"Giving your team an overall rating of " << fixed << setprecision(1) << (team_qbo + team_rbo + team_wro) / 3. <<
+			".\n";
+		if (best_qb && best_rb && best_wr) {
+			cout << "You drafted the best team possible!\n";
+		}
+		else {
+			cout << "The best possible team in the draft had an overall rating of " << fixed << setprecision(1) <<
+				(best_qbo + best_rbo + best_wro) / 3. << ".  ";
+			if (!best_qb) {
+				cout << "The best Quarterback was " << best_qbf << " " << best_qbl << " [" <<
+					best_qbo << "].  ";
+			}
+			else {
+				cout << "You drafted the best Quarterback.  ";
+			}
+			if (!best_rb) {
+				cout << "The best Runningback was " << best_rbf << " " << best_rbl << " [" << best_rbo <<
+					"].  ";
+			}
+			else {
+				cout << "You drafted the best Runningback.  ";
+			}
+			if (!best_wr) {
+				cout << "The best Receiver was " << best_wrf << " " << best_wrl << " [" << best_wro << "].\n";
+			}
+			else {
+				cout << "You drafted the best Receiver.\n";
+			}
+		}
+		cout << "Thanks for playing!";
+	}
